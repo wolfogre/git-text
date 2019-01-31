@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Introduce: https://github.com/wolfogre/git-text
+# Version:   v1.0.0
+
+set -e
+
+FILES=$(git status --short | grep -E "^(A|M)" | awk '{print $2}' | xargs)
+if [[ -z "$FILES" ]]; then
+	exit 0
+fi 
+
+WRONG_FILES=$(file --mime-type ${FILES} | grep -v -E "(text/[A-Za-z0-9.-]*|inode/x-empty)$" | cat)
+
+if [[ -n "${WRONG_FILES}" ]]; then
+	echo "DELETE NON-TEXT FILES OR USE 'git commit -n':"
+	echo -e "${WRONG_FILES}"
+	exit 1
+fi
+
+echo "ALL FILES ARE TEXT:"
+file --mime-type ${FILES}
