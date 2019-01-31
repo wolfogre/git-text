@@ -61,4 +61,12 @@ $ git add --all
 $ git commit -m "test commit"
 DELETE NON-TEXT FILES OR USE 'git commit -n':
 test-text-file.gz: application/x-gzip
+
+## if you really want to commit it
+
+$ git commit -n -m "force commit non-text"
+[master 7c01515] force commit non-text
+ 2 files changed, 64 deletions(-)
+ delete mode 100644 test-text-file
+ create mode 100644 test-text-file.gz
 ```
