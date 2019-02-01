@@ -19,7 +19,7 @@ git text
 
 ## How it works
 
-When you run `get text`, it will download a git hook to `.git/hooks/pre-commit`, so that every time you commit files, the hook will use `file` command to detect file's type, and refuse committing if there are some non-text files.
+When you run `get text`, it will download a git hook to `.git/hooks/pre-commit`, so that every time you commit files, the hook will use [file](http://man7.org/linux/man-pages/man1/file.1.html) command to detect file's type, and refuse committing if there are some non-text files.
 
 ## Test it!
 
