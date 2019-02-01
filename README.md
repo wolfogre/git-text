@@ -23,25 +23,32 @@ When you run `get text`, it will download a git hook to `.git/hooks/pre-commit`,
 
 ## Test it!
 
+1. get git-text
+
 ```text
-## get git-text
-
 $ git config --global alias.text '!gi() { curl -sSL https://raw.githubusercontent.com/wolfogre/git-text/master/pre-commit -o .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit ; }; gi'
+```
 
-## create a new repo to test
+2. create a new repo to test
 
+```text
 $ mkdir test-repo
 $ cd test-repo/
 $ git init
 Initialized empty Git repository in /root/test-repo/.git/
+```
 
-## install git hook
+3. install git hook for the repo
+
+```text
 $ git text
 $ ls -l .git/hooks/pre-commit
 -rwxr-xr-x. 1 root root 486 Jan 31 16:41 .git/hooks/pre-commit
+```
 
-## test committing text files
+4. test committing text files
 
+```text
 $ touch test-empty-file
 $ echo ok > test-text-file
 $ git add --all
@@ -53,17 +60,21 @@ test-text-file:  text/plain
  2 files changed, 1 insertion(+)
  create mode 100644 test-empty-file
  create mode 100644 test-text-file
+```
 
-## test committing non-text files
+5. test committing non-text files
 
+```text
 $ gzip test-text-file
 $ git add --all
 $ git commit -m "test commit"
 DELETE NON-TEXT FILES OR USE 'git commit -n':
 test-text-file.gz: application/x-gzip
+```
 
-## if you really want to commit it
+6. if you really want to commit it
 
+```text
 $ git commit -n -m "force commit non-text"
 [master 7c01515] force commit non-text
  2 files changed, 64 deletions(-)
