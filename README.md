@@ -7,7 +7,7 @@
 1. get a new command "git text"
 
 ```bash
-git config --global alias.text '!gi() { curl -sSL https://raw.githubusercontent.com/wolfogre/git-text/master/pre-commit -o .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit ; }; gi'
+git config --global alias.text '!f() { set -ex ; hookfile=$(git rev-parse --show-toplevel)/.git/hooks/pre-commit ; curl -sSL https://raw.githubusercontent.com/wolfogre/git-text/master/pre-commit -o $hookfile ; chmod +x $hookfile ; }; f'
 ```
 
 2. install hook for a git repo
@@ -26,7 +26,7 @@ When you run `get text`, it will download a git hook to `.git/hooks/pre-commit`,
 1. get git-text
 
 ```text
-$ git config --global alias.text '!gi() { curl -sSL https://raw.githubusercontent.com/wolfogre/git-text/master/pre-commit -o .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit ; }; gi'
+$ git config --global alias.text '!f() { set -ex ; hookfile=$(git rev-parse --show-toplevel)/.git/hooks/pre-commit ; curl -sSL https://raw.githubusercontent.com/wolfogre/git-text/master/pre-commit -o $hookfile ; chmod +x $hookfile ; }; f'
 ```
 
 2. create a new repo to test
@@ -42,8 +42,10 @@ Initialized empty Git repository in /root/test-repo/.git/
 
 ```text
 $ git text
-$ ls -l .git/hooks/pre-commit
--rwxr-xr-x. 1 root root 486 Jan 31 16:41 .git/hooks/pre-commit
+++ git rev-parse --show-toplevel
++ hookfile=/root/test-repo/.git/hooks/pre-commit
++ curl -sSL https://raw.githubusercontent.com/wolfogre/git-text/master/pre-commit -o /root/test-repo/.git/hooks/pre-commit
++ chmod +x /root/test-repo/.git/hooks/pre-commit
 ```
 
 4. test committing text files
