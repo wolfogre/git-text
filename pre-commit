@@ -10,11 +10,12 @@ if [[ -z "$FILES" ]]; then
 	exit 0
 fi 
 
-WRONG_FILES=$(file --mime-type ${FILES} | grep -v -E "(text/[A-Za-z0-9.+-]*|inode/(x-empty|directory|symlink)|application/json|image/svg+xml)$" | cat)
+WRONG_FILES=$(file --mime-type ${FILES} | grep -v -E "(text/[A-Za-z0-9.+-]*|inode/(x-empty|directory|symlink)|application/json|image/svg\+xml)$" | cat)
 
 if [[ -n "${WRONG_FILES}" ]]; then
 	echo "DELETE NON-TEXT FILES OR USE 'git commit -n':"
 	echo -e "${WRONG_FILES}"
+	echo -e "\nIf there are any mistakes, please report to https://github.com/wolfogre/git-text/issues/new"
 	exit 1
 fi
 
