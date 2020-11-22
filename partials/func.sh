@@ -1,10 +1,11 @@
 function find_wrong_files() {
-  local FILE="$*"
-  local FILE_TYPE
-  FILE_TYPE=$(file --mime-type "$FILE" | awk '{print $2}')
-  if ! is_text "$FILE_TYPE"; then
-    WRONG_FILES="$WRONG_FILES\n$FILE"
-  fi
+  for FILE in "$@"; do
+    local FILE_TYPE
+    FILE_TYPE=$(file --mime-type "$FILE" | awk '{print $2}')
+    if ! is_text "$FILE_TYPE"; then
+      echo "$FILE"
+    fi
+  done
 }
 
 function is_text() {
