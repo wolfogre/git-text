@@ -2,33 +2,42 @@ function find_wrong_files() {
   local FILE="$*"
   local FILE_TYPE
   FILE_TYPE=$(file --mime-type "$FILE" | awk '{print $2}')
-  local MAIN_TYPE=${"$FILE_TYPE"%/}
-  local SUB_TYPE=${"$FILE_TYPE"#/}
+  if ! is_text "$FILE_TYPE"; then
+    WRONG_FILES="$WRONG_FILES\n$FILE"
+  fi
+}
+
+function is_text() {
+  FILE_TYPE=$1
+  local MAIN_TYPE=${FILE_TYPE%%/*}
+  local SUB_TYPE=${FILE_TYPE##*/}
+
   case "$MAIN_TYPE" in
   "text")
-    return
+    return 0
     ;;
   "inode")
     case "$SUB_TYPE" in
     "x-empty"|"directory"|"symlink")
-      return
+      return 0
       ;;
     esac
     ;;
   "application")
     case "$SUB_TYPE" in
     "json"|"csv")
-      return
+      return 0
       ;;
     esac
     ;;
   "image")
     case "$SUB_TYPE" in
     "svg+xml")
-      return
+      return 0
       ;;
     esac
     ;;
   esac
-  WRONG_FILES="$WRONG_FILES\n$FILE"
+  return 1
 }
+

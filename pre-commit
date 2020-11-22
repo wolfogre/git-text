@@ -1,43 +1,53 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Introduce: https://github.com/wolfogre/git-text
-# Version:   v1.1.0
+# Version:   v1.2.0
 
 set -e
+
 function find_wrong_files() {
   local FILE="$*"
   local FILE_TYPE
   FILE_TYPE=$(file --mime-type "$FILE" | awk '{print $2}')
-  local MAIN_TYPE=${"$FILE_TYPE"%/}
-  local SUB_TYPE=${"$FILE_TYPE"#/}
+  if ! is_text "$FILE_TYPE"; then
+    WRONG_FILES="$WRONG_FILES\n$FILE"
+  fi
+}
+
+function is_text() {
+  FILE_TYPE=$1
+  local MAIN_TYPE=${FILE_TYPE%%/*}
+  local SUB_TYPE=${FILE_TYPE##*/}
+
   case "$MAIN_TYPE" in
   "text")
-    return
+    return 0
     ;;
   "inode")
     case "$SUB_TYPE" in
     "x-empty"|"directory"|"symlink")
-      return
+      return 0
       ;;
     esac
     ;;
   "application")
     case "$SUB_TYPE" in
     "json"|"csv")
-      return
+      return 0
       ;;
     esac
     ;;
   "image")
     case "$SUB_TYPE" in
     "svg+xml")
-      return
+      return 0
       ;;
     esac
     ;;
   esac
-  WRONG_FILES="$WRONG_FILES\n$FILE"
+  return 1
 }
+
 FILES=$(git status --short | grep -E "^(A|M)" | awk '{print $2}' | xargs)
 if [[ -z "$FILES" ]]; then
 	exit 0
@@ -48,10 +58,11 @@ echo "$FILES" | while read -r LINE; do find_wrong_files "$LINE"; done
 
 if [[ -n "${WRONG_FILES}" ]]; then
 	echo "DELETE NON-TEXT FILES OR USE 'git commit -n':"
-	echo -e "${WRONG_FILES}"
+	file --mime-type ${WRONG_FILES}
 	echo -e "\nIf there are any mistakes, please report to https://github.com/wolfogre/git-text/issues/new"
 	exit 1
 fi
 
 echo "ALL FILES ARE TEXT:"
 file --mime-type ${FILES}
+

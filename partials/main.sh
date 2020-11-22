@@ -8,10 +8,11 @@ echo "$FILES" | while read -r LINE; do find_wrong_files "$LINE"; done
 
 if [[ -n "${WRONG_FILES}" ]]; then
 	echo "DELETE NON-TEXT FILES OR USE 'git commit -n':"
-	echo -e "${WRONG_FILES}"
+	file --mime-type ${WRONG_FILES}
 	echo -e "\nIf there are any mistakes, please report to https://github.com/wolfogre/git-text/issues/new"
 	exit 1
 fi
 
 echo "ALL FILES ARE TEXT:"
 file --mime-type ${FILES}
+

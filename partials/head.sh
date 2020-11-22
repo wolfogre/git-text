@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Introduce: https://github.com/wolfogre/git-text
-# Version:   v1.1.0
+# Version:   v1.2.0
 
 set -e
+
